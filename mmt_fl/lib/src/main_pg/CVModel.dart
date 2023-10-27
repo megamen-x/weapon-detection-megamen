@@ -34,11 +34,11 @@ class NewDataSource extends DataGridSource {
   NewDataSource({required List<NewData> NewData_Data}) {
     _NewData_Data = NewData_Data
         .map<DataGridRow>((e) => DataGridRow(cells: [
-              DataGridCell<String>(columnName: 'id', value: e.id),
-              DataGridCell<String>(columnName: 'name', value: e.name),
+              DataGridCell<String>(columnName: 'file_name', value: e.id),
+              DataGridCell<String>(columnName: 'count_short_name', value: e.name),
               DataGridCell<String>(
-                  columnName: 'designation', value: e.designation),
-              DataGridCell<String>(columnName: 'salary', value: e.salary),
+                  columnName: 'count_long_name', value: e.designation),
+              DataGridCell<String>(columnName: 'count_dangerous_people', value: e.salary),
             ]))
         .toList();
   }
@@ -217,10 +217,10 @@ class  _CVModelState extends State<CVModel>{
       File dataFile = File(path);
       String dataString = dataFile.readAsStringSync();
       final responceMap = jsonDecode(dataString);
-      // print(responceMap);
+      print(responceMap);
       List<dynamic> dataMap = jsonDecode(jsonEncode(responceMap["data"]));
       // print(dataMap);
-      List<List> dataList = dataMap.map((element) => [element['name'], element['number'], element['confidence'], element['is_correct']]).toList();
+      List<List> dataList = dataMap.map((element) => [element['name'], element['count_short'], element['count_long'], element['count_dangerous_people']]).toList();
       // print(dataList);
       
       setState(() {
@@ -360,7 +360,7 @@ Future<void> clearFolders() async {
       ),
       body: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(minWidth: 300, maxWidth: 1080),
+          constraints: const BoxConstraints(minWidth: 300, maxWidth: 1280),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: SingleChildScrollView(
@@ -497,13 +497,13 @@ Future<void> clearFolders() async {
                                         },
                                         columns: <GridColumn>[
                                           GridColumn(
-                                              columnName: 'id',
+                                              columnName: 'file_name',
                                               // autoFitPadding: EdgeInsets.all(16.0),
                                               label: Container(
                                                   padding: const EdgeInsets.all(8.0),
                                                   alignment: Alignment.center,
                                                   child: const Text(
-                                                    'file name', 
+                                                    'Файл', 
                                                     // overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                           fontWeight: FontWeight.w600,
@@ -515,14 +515,14 @@ Future<void> clearFolders() async {
                                               )
                                           ),
                                           GridColumn(
-                                              columnName: 'name',
+                                              columnName: 'count_short_name',
                                               // columnWidthMode: ColumnWidthMode.lastColumnFill,
                                               // autoFitPadding: EdgeInsets.all(16.0),
                                               label: Container(
                                                   padding: const EdgeInsets.all(8.0),
                                                   alignment: Alignment.center,
                                                   child: const Text(
-                                                    'Файл',
+                                                    'Короткое оружие',
                                                     // overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                           fontWeight: FontWeight.w600,
@@ -534,13 +534,13 @@ Future<void> clearFolders() async {
                                               )
                                           ),
                                           GridColumn(
-                                              columnName: 'designation',
+                                              columnName: 'count_long_name',
                                               // autoFitPadding: EdgeInsets.all(16.0),
                                               label: Container(
                                                   padding: const EdgeInsets.all(8.0),
                                                   alignment: Alignment.center,
                                                   child: const Text(
-                                                    'Наличие оружия',
+                                                    'Длинное оружия',
                                                     // overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                           fontWeight: FontWeight.w600,
@@ -552,13 +552,13 @@ Future<void> clearFolders() async {
                                               )
                                           ),
                                           GridColumn(
-                                              columnName: 'salary',
+                                              columnName: 'count_dangerous_people',
                                               // autoFitPadding: EdgeInsets.all(16.0),
                                               label: Container(
                                                   padding: const EdgeInsets.all(8.0),
                                                   alignment: Alignment.center,
                                                   child: const Text(
-                                                    'Предсказание (%)',
+                                                    'Опасные люди',
                                                     // overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                           fontWeight: FontWeight.w600,
