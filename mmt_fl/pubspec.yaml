@@ -1,0 +1,60 @@
+name: mmt_fl
+description: A new Flutter project.
+
+publish_to: 'none'
+
+# Android
+# https://developer.android.com/studio/publish/versioning
+# IOS
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.6 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  smooth_page_indicator: ^1.1.0
+  restart_app: ^1.2.1
+  file_picker: ^6.0.0
+  open_file: ^3.3.2
+  flutter_launcher_icons: ^0.13.1
+  http: ^1.1.0
+  image_picker: ^1.0.4
+  html: ^0.15.4
+  url_launcher: ^6.1.14
+  path: ^1.8.3
+  path_provider: ^2.1.1
+  filesystem_picker: ^3.1.0
+  open_file_manager: ^0.0.4
+  syncfusion_flutter_datagrid: ^23.1.42
+  syncfusion_flutter_core: ^23.1.42
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    # - assets/images/Untitled-1.png
+    # - assets/images/sml.png
+    # - assets/images/vlad.png
+    # - assets/images/egor.png
+    # - assets/images/alexandr.png
+    # - assets/images/alex.png
+    - assets/images/
+    - assets/sml.png
+  
