@@ -23,7 +23,6 @@ import torch.nn.functional as F
 
 
 yolo = None
-ocr = None
 
 app = FastAPI(title="Guns detection")
 
@@ -83,7 +82,7 @@ def main_64(file: Image64, background: BackgroundTasks):
         image_as_bytes = str.encode(file)  # convert string to bytes
         img_recovered = base64.b64decode(image_as_bytes)  # decode base64string
         image = Image.open(io.BytesIO(img_recovered))
-        base_file_path = os.path.join(path_files, names[i])
+        base_file_path = os.path.join('BackEnd', 'original', names[i])
         _ = image.save(base_file_path)
         results = yolo.predict(image)
         bbox_image = draw_boxes(base_file_path, results)
