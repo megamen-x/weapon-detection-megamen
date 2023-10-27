@@ -18,19 +18,14 @@ import 'package:flutter/services.dart';
 // ---------------------------------------------------------------------------------------------- //
 //  Для новых таблиц
 class NewData {
-  /// Creates the NewData class with required details.
   NewData(this.id, this.name, this.designation, this.salary);
 
-  /// Id of an NewData.
   final String id;
 
-  /// Name of an NewData.
   final String name;
 
-  /// Designation of an NewData.
   final String designation;
 
-  /// Salary of an NewData.
   final String salary;
 }
 
