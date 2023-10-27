@@ -183,6 +183,7 @@ class  _CVModelState extends State<CVModel>{
     List<XFile>? imageFileList = [];
     List<String>? pathFiles = [];
     final List<XFile> selectedImages = await picker.pickMultiImage();
+    // final List<XFile> selectedImages = await picker.pickMultiImage();
     if (selectedImages.isNotEmpty) {
         imageFileList.addAll(selectedImages);
     }
@@ -197,6 +198,7 @@ class  _CVModelState extends State<CVModel>{
     }
     final json = {'files_names': pathFiles,
                 'files': base64list};
+
     final response = await http.post(
         // Uri.parse('http://95.163.250.213/get_result_64'),
         Uri.parse('http://127.0.0.1:8000/get_result_64'),
@@ -427,7 +429,7 @@ Future<void> clearFolders() async {
                                     ? const Center(child: SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Color(0xFF181818), )))
                                     : const Icon(Icons.add, color: Color(0xFF181818), size: 22,),
                                 label: Text(
-                                  _isLoading ? 'Загрузка...' : 'Ваш файл',
+                                  _isLoading ? 'Загрузка...' : 'Ваше фото',
                                   style: const TextStyle(fontSize: 20, color: Color(0xFF181818)),
                                 ),
                                 onPressed: () => _isLoading ? null : uploadImage(),
@@ -466,11 +468,11 @@ Future<void> clearFolders() async {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
+                            mainAxisSize: MainAxisSize.max,
                             children: [
                               Flexible(
                                 child: ConstrainedBox(
-                                  constraints: const BoxConstraints(minWidth: 220, maxWidth: 500),
+                                  constraints: const BoxConstraints(minWidth: 220, maxWidth: 700),
                                   child: SfDataGridTheme(
                                     data: SfDataGridThemeData(
                                       headerColor: const Color(0xFF0E223F),
@@ -520,7 +522,7 @@ Future<void> clearFolders() async {
                                                   padding: const EdgeInsets.all(8.0),
                                                   alignment: Alignment.center,
                                                   child: const Text(
-                                                    'number',
+                                                    'Файл',
                                                     // overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                           fontWeight: FontWeight.w600,
@@ -538,7 +540,7 @@ Future<void> clearFolders() async {
                                                   padding: const EdgeInsets.all(8.0),
                                                   alignment: Alignment.center,
                                                   child: const Text(
-                                                    'confidence',
+                                                    'Наличие оружия',
                                                     // overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                           fontWeight: FontWeight.w600,
@@ -556,7 +558,7 @@ Future<void> clearFolders() async {
                                                   padding: const EdgeInsets.all(8.0),
                                                   alignment: Alignment.center,
                                                   child: const Text(
-                                                    'is correct',
+                                                    'Предсказание (%)',
                                                     // overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                           fontWeight: FontWeight.w600,
