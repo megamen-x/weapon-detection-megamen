@@ -27,7 +27,7 @@ def crop(path_to_image: str, yolo_predict) -> numpy.ndarray:
         return None
 
 
-def draw_boxes(path_to_image: str, yolo_predict) -> numpy.ndarray:
+def draw_boxes(path_to_image: str, yolo_predict) -> np.ndarray:
     """
     Get the original image and return image with visualized bboxes (coord from yolo v8 predict)
     :param path_to_image: str
@@ -37,10 +37,14 @@ def draw_boxes(path_to_image: str, yolo_predict) -> numpy.ndarray:
     image = cv2.imread(path_to_image)
     height, width, _ = image.shape
 
-    x_min, y_min, x_max, y_max = yolo_predict[0].boxes.xyxyn[0]
-    x_min = int(x_min * width)
-    y_min = int(y_min * height)
-    x_max = int(x_max * width)
-    y_max = int(y_max * height)
-    cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 5) # array here
+    if yolo_predict[0].boxes.xyxyn is not None:
+        for object_ in yolo_predict[0].boxes.xyxyn:
+            # x_min, y_min, x_max, y_max = yolo_predict[0].boxes.xyxyn[0]
+            x_min, y_min, x_max, y_max = object_
+            x_min = int(x_min * width)
+            y_min = int(y_min * height)
+            x_max = int(x_max * width)
+            y_max = int(y_max * height)
+            cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 3)  # array here
+
     return image
