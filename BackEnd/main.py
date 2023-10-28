@@ -53,7 +53,7 @@ app.add_middleware(
 def startup_event():
     global models
     model_1 = YOLO(os.path.join('BackEnd', 'ml', 'best_large.pt')) # впиши сюда путь до первой модели
-    model_2 = YOLO(os.path.join('BackEnd', 'ml', 'best_large_from_datasphere.pt')) # впиши сюда путь для второй модели
+    model_2 = YOLO(os.path.join('BackEnd', 'ml', 'best_model_from_datasphere.pt')) # впиши сюда путь для второй модели
     models = [model_1, model_2]
 
 
@@ -97,16 +97,15 @@ def image_detection(file: Image64, background: BackgroundTasks):
             models=models,
             path_to_image=base_file_path
         )
-        count_labels = count_classes(labels)
+        # count_labels = count_classes(labels)
         bbox_image = draw_boxes_from_list(
             path_to_image=base_file_path,
             list_yolo_pred=boxes
         )
-        
         # bbox_image = draw_boxes(base_file_path, results)
         imwrite(os.path.join(path_files, f"boxed_image-{names[i]}"), bbox_image)
-        count_short, count_long = count_labels['1'], count_labels['0']
-        json_ans['data'].append({'name': names[i], 'count_short': count_short, 'count_long' : count_long})
+        count_short, count_long = 1, 0 # count_labels['1'], count_labels['0']
+        json_ans['data'].append({'name': names[i], 'count_short': count_short, 'count_long' : count_long, 'count_dangerous_people': count_short+count_long})
     with open(os.path.join(path_files, 'data.txt'), 'w') as outfile:
         json.dump(json_ans, outfile)
     background.add_task(remove_file, path_files)

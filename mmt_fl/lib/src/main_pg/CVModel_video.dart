@@ -149,11 +149,6 @@ class  _CVVIDState extends State<CVVID>{
     );
     if (response.statusCode == 200) {
       unzipFileFromResponse(response.bodyBytes);
-      // const path = "./responce/data.txt";
-      // File dataFile = File(path);
-      // String dataString = dataFile.readAsStringSync();
-      // final responceMap = jsonDecode(dataString);
-      // print(jsonEncode(responceMap["data"]));
       setState(() {
         player.open(Media('D:/Work/hack_perm_megamen/perm_hack/mmt_fl/assets/images/test1.mp4'));
         flag = true;
