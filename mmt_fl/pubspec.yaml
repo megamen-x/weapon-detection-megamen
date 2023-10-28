@@ -33,6 +33,7 @@ dependencies:
   open_file_manager: ^0.0.4
   syncfusion_flutter_datagrid: ^23.1.42
   syncfusion_flutter_core: ^23.1.42
+  video_player: ^2.7.2
 
 dev_dependencies:
   flutter_test:
@@ -57,4 +58,5 @@ flutter:
     # - assets/images/alex.png
     - assets/images/
     - assets/sml.png
+    - responce
   

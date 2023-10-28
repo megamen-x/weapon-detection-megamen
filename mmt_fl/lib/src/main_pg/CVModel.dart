@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:mmt_fl/src/main_pg/CVModel_video.dart';
 import 'package:mmt_fl/src/main_pg/Left_Menu.dart';
 import 'package:mmt_fl/src/main_pg/MEGAMEN.dart';
+import 'package:mmt_fl/src/syst_pg/DataNotFound.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -35,9 +37,9 @@ class NewDataSource extends DataGridSource {
     _NewData_Data = NewData_Data
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<String>(columnName: 'file_name', value: e.id),
-              DataGridCell<String>(columnName: 'count_short_name', value: e.name),
+              DataGridCell<String>(columnName: 'count_short_n', value: e.name),
               DataGridCell<String>(
-                  columnName: 'count_long_name', value: e.designation),
+                  columnName: 'count_long_n', value: e.designation),
               DataGridCell<String>(columnName: 'count_dangerous_people', value: e.salary),
             ]))
         .toList();
@@ -50,13 +52,17 @@ class NewDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((e) {
       TextStyle? getTextStyle() {
-        if (e.columnName == 'id') {
-          return const TextStyle(color: Colors.pinkAccent);
+        if (e.columnName == 'file_name') {
+          return const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontStyle: FontStyle.normal,
+            fontSize: 14, 
+            color: Colors.pinkAccent);
         } else {
           return const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                  fontSize: 15,
+                  fontSize: 14,
                   color: Color(0xFFF3F2F3),
                 );
         }
@@ -76,18 +82,11 @@ class NewDataSource extends DataGridSource {
 // Данные для новых таблиц
   List<NewData> NewDatas = <NewData>[];
   late NewDataSource NewDataDataSource;
-  List<NewData> getNewDataData() {
-      return [
-        NewData('10001', 'James', 'Project Leeeeead', '20000'),
-        NewData('10002', 'Kathryn', 'Manager', '30000'),
-      ];
-    }
 
 // ---------------------------------------------------------------------------------------------- //
 // Класс страницы
 class CVModel extends StatefulWidget {
   const CVModel({super.key});
-  
   @override
   State<CVModel> createState() => _CVModelState();
 }
@@ -95,24 +94,19 @@ class CVModel extends StatefulWidget {
 // сборщик
 class  _CVModelState extends State<CVModel>{
   final _pageController = PageController();
-
   late var newDataList = [];
+  late var popup = '';
   List<String> frstImgs = [
     "./assets/images/sml.png",
   ];
   List<String> bboxImgs = [
-    // "./assets/images/sml.png",
     "./assets/images/sml.png",
   ];
   List<String> cropImgs = [
-    // "./assets/images/sml.png",
     "./assets/images/sml.png",
   ];
-
   bool flag = false;
-
   List<Widget> nameSlots = [];
-
   bool _isLoading = false;
 
   // ---------------------------------------------------------------------------------------------- //
@@ -122,8 +116,7 @@ class  _CVModelState extends State<CVModel>{
     for (final file in archive) {
       final filename = file.name;
       if (file.isFile) {
-        // print("test file");
-        print(filename);
+        // print(filename);
         final data = file.content as List<int>;
         if (filename.contains('.jpg') || filename.contains('.jpeg') || filename.contains('.png')) {
           if (Platform.isWindows) {
@@ -167,7 +160,6 @@ class  _CVModelState extends State<CVModel>{
           }
         }
       } else {
-        print("test dir");
         await Directory('responce/$filename').create(recursive: true);
       }
     }
@@ -183,7 +175,6 @@ class  _CVModelState extends State<CVModel>{
     List<XFile>? imageFileList = [];
     List<String>? pathFiles = [];
     final List<XFile> selectedImages = await picker.pickMultiImage();
-    // final List<XFile> selectedImages = await picker.pickMultiImage();
     if (selectedImages.isNotEmpty) {
         imageFileList.addAll(selectedImages);
     }
@@ -196,11 +187,8 @@ class  _CVModelState extends State<CVModel>{
       final base64Image1 = base64.encode(imageBytes1);
       base64list.add(base64Image1);
     }
-    final json = {'files_names': pathFiles,
-                'files': base64list};
-
+    final json = {'files_names': pathFiles,'files': base64list};
     final response = await http.post(
-        // Uri.parse('http://95.163.250.213/get_result_64'),
         Uri.parse('http://127.0.0.1:8000/get_result_64'),
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
         body: jsonEncode(json),
@@ -227,10 +215,9 @@ class  _CVModelState extends State<CVModel>{
         flag = true;
         _isLoading = false;
         newDataList = dataMap; 
+        popup = jsonEncode(dataMap);
         NewDatas = [];
         for (var i = 0; i < dataList.length; i++) {
-          // print(jsonEncode(dataList[i]).toString());
-          // print(dataList[i][1]);
           NewDatas.add(NewData(dataList[i][0].toString(), dataList[i][1].toString(), dataList[i][2].toString(), dataList[i][3].toString()));
         }
         NewDataDataSource = NewDataSource(NewData_Data: NewDatas);
@@ -248,6 +235,9 @@ class  _CVModelState extends State<CVModel>{
       });
     } else {
       print('Failed to upload image.');
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 // ---------------------------------------------------------------------------------------------- //
@@ -267,7 +257,6 @@ class  _CVModelState extends State<CVModel>{
   void initState() {
     super.initState();
     NewDatas;
-    // NewDatas = getNewDataData();
     NewDataDataSource = NewDataSource(NewData_Data: NewDatas);
   }
 // ---------------------------------------------------------------------------------------------- //
@@ -278,7 +267,7 @@ Future<File> getImageFileFromAssets(String path) async {
   Directory? tempDir = await getDownloadsDirectory(); 
   // print(tempDir);
   String tempPath = tempDir!.path; 
-  var filePath = tempPath + path; // path - path to asset file
+  var filePath = tempPath + path;
   // print(filePath);
   return File(filePath) .writeAsBytes(buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
 }
@@ -310,6 +299,139 @@ Future<void> clearFolders() async {
   }
 }
 // ---------------------------------------------------------------------------------------------- //
+// popup виджет
+  void _showAlertPredict(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(12.0))),
+          title: const Text("Ошибка!", 
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 16,
+                  color: Color(0xFFF3F2F3),
+                )
+              ),
+          backgroundColor: const Color(0xFF242424),
+          content: const Text("Файл предсказания модели не существует!", 
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.normal,
+                              fontSize: 16,
+                              color: Color(0xFFF3F2F3),
+                            )
+                          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK", 
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 16,
+                            color: Color(0xFFF3F2F3),
+                        )
+                      ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void _showPredict(BuildContext context, String fileContext) {
+    if (fileContext != '') {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12.0))),
+            title: const Text("Ошибка!", 
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                    fontSize: 16,
+                    color: Color(0xFFF3F2F3),
+                  )
+                ),
+            backgroundColor: const Color(0xFF242424),
+            content: Text(fileContext, 
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FontStyle.normal,
+                                fontSize: 16,
+                                color: Color(0xFFF3F2F3),
+                              )
+                            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK", 
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.normal,
+                              fontSize: 16,
+                              color: Color(0xFFF3F2F3),
+                          )
+                        ),
+              ),
+            ],
+          );
+        },
+      );
+    }
+    else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12.0))),
+            title: const Text("Ошибка!", 
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                    fontSize: 16,
+                    color: Color(0xFFF3F2F3),
+                  )
+                ),
+            backgroundColor: const Color(0xFF242424),
+            content: const Text("Файл предсказания пуст!", 
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FontStyle.normal,
+                                fontSize: 16,
+                                color: Color(0xFFF3F2F3),
+                              )
+                            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK", 
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.normal,
+                              fontSize: 16,
+                              color: Color(0xFFF3F2F3),
+                          )
+                        ),
+              ),
+            ],
+          );
+        },
+      );
+    }
+    
+  }
 // ---------------------------------------------------------------------------------------------- //
 // ---------------------------------------------------------------------------------------------- //
 // визуальная обертка
@@ -416,26 +538,50 @@ Future<void> clearFolders() async {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Row(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.max,
                           children: [
+                            ElevatedButton.icon(
+                              icon: _isLoading
+                                  ? const Center(child: SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Color(0xFF181818), )))
+                                  : const Icon(Icons.add, color: Color(0xFF181818), size: 22,),
+                              label: Text(
+                                _isLoading ? 'Загрузка...' : 'Ваше фото',
+                                style: const TextStyle(fontSize: 20, color: Color(0xFF181818)),
+                              ),
+                              onPressed: () => _isLoading ? null : uploadImage(),
+                                style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.all(14),
+                                backgroundColor: const Color(0xFF3882F2),
+                              ),
+                            ),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: 
-                              ElevatedButton.icon(
-                                icon: _isLoading
-                                    ? const Center(child: SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Color(0xFF181818), )))
-                                    : const Icon(Icons.add, color: Color(0xFF181818), size: 22,),
-                                label: Text(
-                                  _isLoading ? 'Загрузка...' : 'Ваше фото',
-                                  style: const TextStyle(fontSize: 20, color: Color(0xFF181818)),
+                              padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                              child: MaterialButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const CVVID()),
+                                  );
+                                },
+                                color: const Color(0xFF3882F2),
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
                                 ),
-                                onPressed: () => _isLoading ? null : uploadImage(),
-                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(12),
-                                  backgroundColor: const Color(0xFF3882F2),
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                textColor: const Color(0xFF181818),
+                                height: 45,
+                                minWidth: 180,
+                                child: const Text(
+                                  "Загрузить видео",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    fontStyle: FontStyle.normal,
+                                  ),
                                 ),
                               ),
                             ),
@@ -472,80 +618,69 @@ Future<void> clearFolders() async {
                             children: [
                               Flexible(
                                 child: ConstrainedBox(
-                                  constraints: const BoxConstraints(minWidth: 220, maxWidth: 700),
+                                  constraints: const BoxConstraints(minWidth: 220, maxWidth: 700, maxHeight: 200),
                                   child: SfDataGridTheme(
                                     data: SfDataGridThemeData(
                                       headerColor: const Color(0xFF0E223F),
                                       headerHoverColor: const Color(0xFF3882F2),
                                       gridLineColor: const Color(0xFF3882F2), 
                                       gridLineStrokeWidth: 2.0,
-                                      rowHoverColor: const Color(0xFF0E223F), 
+                                      rowHoverColor: const Color(0xFF0E223F),
                                       ),
                                     child: SfDataGrid(
-                                        
                                         source: NewDataDataSource,
                                         allowSorting: true,
                                         allowMultiColumnSorting: true,
                                         allowTriStateSorting: true,
-                                        // showSortNumbers: true,
                                         showColumnHeaderIconOnHover: true,
                                         columnWidthMode: ColumnWidthMode.lastColumnFill,
-                                        // columnWidthMode: ColumnWidthMode.auto,
-                                        // columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
                                         onQueryRowHeight: (details) {
                                           return details.getIntrinsicRowHeight(details.rowIndex);
                                         },
                                         columns: <GridColumn>[
                                           GridColumn(
                                               columnName: 'file_name',
-                                              // autoFitPadding: EdgeInsets.all(16.0),
                                               label: Container(
                                                   padding: const EdgeInsets.all(8.0),
                                                   alignment: Alignment.center,
                                                   child: const Text(
                                                     'Файл', 
-                                                    // overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontStyle: FontStyle.normal,
-                                                          fontSize: 16,
+                                                          fontSize: 14,
                                                           color: Color(0xFFF3F2F3),
                                                         ),
                                                   )
                                               )
                                           ),
                                           GridColumn(
-                                              columnName: 'count_short_name',
-                                              // columnWidthMode: ColumnWidthMode.lastColumnFill,
-                                              // autoFitPadding: EdgeInsets.all(16.0),
+                                              columnName: 'count_short_n',
                                               label: Container(
                                                   padding: const EdgeInsets.all(8.0),
                                                   alignment: Alignment.center,
                                                   child: const Text(
                                                     'Короткое оружие',
-                                                    // overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontStyle: FontStyle.normal,
-                                                          fontSize: 17,
+                                                          fontSize: 14,
                                                           color: Color(0xFFF3F2F3),
                                                         ),
                                                   )
                                               )
                                           ),
                                           GridColumn(
-                                              columnName: 'count_long_name',
-                                              // autoFitPadding: EdgeInsets.all(16.0),
+                                              columnName: 'count_long_n',
                                               label: Container(
                                                   padding: const EdgeInsets.all(8.0),
                                                   alignment: Alignment.center,
                                                   child: const Text(
-                                                    'Длинное оружия',
-                                                    // overflow: TextOverflow.ellipsis,
+                                                    'Длинное оружие',
                                                     style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontStyle: FontStyle.normal,
-                                                          fontSize: 17,
+                                                          fontSize: 14,
                                                           color: Color(0xFFF3F2F3),
                                                         ),
                                                   )
@@ -553,17 +688,15 @@ Future<void> clearFolders() async {
                                           ),
                                           GridColumn(
                                               columnName: 'count_dangerous_people',
-                                              // autoFitPadding: EdgeInsets.all(16.0),
                                               label: Container(
                                                   padding: const EdgeInsets.all(8.0),
                                                   alignment: Alignment.center,
                                                   child: const Text(
                                                     'Опасные люди',
-                                                    // overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontStyle: FontStyle.normal,
-                                                          fontSize: 17,
+                                                          fontSize: 14,
                                                           color: Color(0xFFF3F2F3),
                                                         ),
                                                   )
@@ -599,18 +732,15 @@ Future<void> clearFolders() async {
                   ),
 // ---------------------------------------------------------------------------------------------- //
                   Container(
-                    // margin: const EdgeInsets.all(15.0),
-                    // padding: const EdgeInsets.all(3.0),
                     width: MediaQuery.of(context).size.width,
-                    height: 350,
+                    height: 460,
                     decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFF3882F2), width: 2,),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      border: Border.all(color: const Color(0xFF3882F2), width: 2),
+                      borderRadius: const BorderRadius.all(Radius.circular(6)),
                     ),
                     child:  Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Flexible(
                           child: CustomScrollView(
@@ -618,14 +748,15 @@ Future<void> clearFolders() async {
                             scrollDirection: Axis.horizontal,
                             slivers: <Widget>[
                               SliverPadding(
-                              padding: const EdgeInsets.fromLTRB(20, 20, 0, 20),
+                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                               sliver: SliverList(
                                 delegate: SliverChildListDelegate(
                                   <Widget>[
                                     Padding(
-                                      padding: const EdgeInsets.fromLTRB(0, 20, 70, 20),
-                                      child: SizedBox(
-                                        height: 330,
+                                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                      child: 
+                                      SizedBox(
+                                        // height: MediaQuery.of(context).size.height,
                                         width: 300,
                                         child: Stack(
                                           children: [                           
@@ -645,7 +776,7 @@ Future<void> clearFolders() async {
                                                           Column(
                                                             children: [
                                                               Image.file(File(bboxImgs[index]),
-                                                                        height: 200,
+                                                                        height: 300,
                                                                         width: MediaQuery.of(context).size.width,
                                                                         fit: BoxFit.contain,
                                                               ),
@@ -667,7 +798,7 @@ Future<void> clearFolders() async {
                                             Align(
                                               alignment: Alignment.bottomCenter,
                                               child: Padding(
-                                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 35),
                                                 child: SmoothPageIndicator(
                                                   controller: _pageController ,
                                                   count: bboxImgs.length,
@@ -687,7 +818,7 @@ Future<void> clearFolders() async {
                                             const Align(
                                               alignment: Alignment.topCenter,
                                               child: Padding(
-                                                padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
+                                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                                 child: Row(
                                                   children: [
                                                   Text(
@@ -708,92 +839,6 @@ Future<void> clearFolders() async {
                                         ),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(70, 20, 20, 20),
-                                      child: SizedBox(
-                                        height: 330,
-                                        width: 300,
-                                        child: Stack(
-                                          children: [
-                                            PageView.builder(
-                                              controller: _pageController,
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount: cropImgs.length,
-                                              itemBuilder: (context, index) {
-                                                return Align(
-                                                  alignment: Alignment.topCenter,
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(
-                                                        vertical: 16, horizontal: 0),
-                                                    child: ClipRRect(
-                                                      borderRadius: BorderRadius.circular(5.0),
-                                                      child:
-                                                          Column(
-                                                            children: [
-                                                              Image.file(File(cropImgs[index]),
-                                                                        height: 200,
-                                                                        width: MediaQuery.of(context).size.width,
-                                                                        fit: BoxFit.contain,
-                                                              ),
-                                                              Text(basename(cropImgs[index].toString()), 
-                                                              style: const TextStyle(
-                                                                fontWeight: FontWeight.w400,
-                                                                fontStyle: FontStyle.normal,
-                                                                fontSize: 18,
-                                                                color: Color(0xFFF3F2F3),
-                                                              ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                            Align(
-                                              alignment: Alignment.bottomCenter,
-                                              child: Padding(
-                                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                                                child: SmoothPageIndicator(
-                                                  controller: _pageController ,
-                                                  count: cropImgs.length,
-                                                  axisDirection: Axis.horizontal,
-                                                  effect: const ExpandingDotsEffect(
-                                                    dotColor: Color(0xFF2b548f),
-                                                    activeDotColor: Color(0xFF2b548f),
-                                                    dotHeight: 10,
-                                                    dotWidth: 10,
-                                                    radius: 16,
-                                                    spacing: 7,
-                                                    expansionFactor: 2,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            const Align(
-                                              alignment: Alignment.topCenter,
-                                              child: Padding(
-                                                padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
-                                                child: Row(
-                                                  children: [
-                                                  Text(
-                                                  "Yolo Crop",
-                                                  textAlign: TextAlign.center,
-                                                  overflow: TextOverflow.clip,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontStyle: FontStyle.normal,
-                                                    fontSize: 14,
-                                                    color: Color(0xFFF3F2F3),
-                                                  ),
-                                                ), ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
                                     ],
                                   ),
                                 ),
@@ -804,6 +849,7 @@ Future<void> clearFolders() async {
                       ],
                     ),
                   ),
+// ---------------------------------------------------------------------------------------------- //
                   Container(
                     alignment: Alignment.center,
                     margin: const EdgeInsets.all(10),
@@ -815,31 +861,51 @@ Future<void> clearFolders() async {
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.zero,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: MaterialButton(
-                        onPressed: () {
-                          openFileManager();
-                        },
-                        color: const Color(0xFF3882F2),
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                        textColor: const Color(0xFF181818),
-                        height: 60,
-                        minWidth: 180,
-                        child: const Text(
-                          "Открыть predict",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            fontStyle: FontStyle.normal,
+                    child: 
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: MaterialButton(
+                          onPressed: () async {
+                            if (Platform.isWindows) {
+                              try {
+                                File file = File('./responce/data.txt');
+                                if (file.existsSync()) {
+                                    print('ДА ЗДЕСЬ Я УЖЕ');
+                                    // String fileContent = await file.readAsString();
+                                    _showPredict(context, popup);
+                                    OpenFile.open(file.path);
+                                }
+                                else {
+                                  _showAlertPredict(context);
+                                }
+                              }
+                              catch (e) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const DataNotFound()),
+                                );
+                              }
+                            }
+                          },
+                          color: const Color(0xFF3882F2),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          textColor: const Color(0xFF181818),
+                          height: 60,
+                          minWidth: 180,
+                          child: const Text(
+                            "Открыть predict",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              fontStyle: FontStyle.normal,
+                            ),
                           ),
                         ),
                       ),
-                    ),
                   ),
 // ---------------------------------------------------------------------------------------------- //
                   const Padding(
