@@ -3,13 +3,15 @@ from ensemble_boxes import *
 from ultralytics import YOLO
 from typing import List, Optional, Dict
 from cv2_converter import draw_boxes_from_list
+import cv2
+import os
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 def restructure_preds(yolo_pred):
     """
-    Формирует предскзаания модеелй в необходимом формате:
+    Формирует предскзаания моделей в необходимом формате:
     [координаты bbox, уверенность в предсказаниях, предсказанные лейблы]
     :param yolo_pred: возвращаемое значение функции predict_one_model, содержит всю информацию о предсказании моделью
     :return:
@@ -27,7 +29,7 @@ def restructure_preds(yolo_pred):
 def ensemble_boxes(
         models: List[YOLO],
         path_to_image: str,
-        weights: Optional[List[float, ...]] = None,
+        weights: Optional[List[float]] = None,
         run_type: str = 'wbf',
         iou_thr: float = 0.5,
         skip_box_thr: float = 0.0001,
@@ -112,21 +114,20 @@ def count_classes(labels: List[int]) -> Dict[str, int]:
 
 
 if __name__ == '__main__':
-    model_1 = YOLO(...) # впиши сюда путь до первой модели
-    model_2 = YOLO(...) # впиши сюда путь для второй модели
+    model_1 = YOLO('/home/agar1us/Documents/perm_hack/BackEnd/ml/best_large.pt') # впиши сюда путь до первой модели
+    model_2 = YOLO('/home/agar1us/Documents/perm_hack/BackEnd/ml/best_model_from_datasphere.pt') # впиши сюда путь для второй модели
 
     models = [model_1, model_2]
-    weights = [1, 1]
 
-    path_to_image = '...'
+    path_to_image = '/home/agar1us/Documents/perm_hack/4c45ef8a-frame_11_339_png.rf.3b720327f28c092e000e6d76162e3091.jpg'
 
     boxes, scores, labels = ensemble_boxes(
-        models=models,
-        path_to_image=path_to_image
-    )
-
-    count_labels = count_classes(labels=labels) # количество обьектов каждого класса
-    np_image = draw_boxes_from_list(
+            models=models,
+            path_to_image=path_to_image
+        )
+    count_labels = count_classes(labels)
+    bbox_image = draw_boxes_from_list(
         path_to_image=path_to_image,
         list_yolo_pred=boxes
     )
+    cv2.imwrite(os.path.join("/home/agar1us/Documents/perm_hack/BackEnd/photos", "boxed_image-test.jpg"), bbox_image)
