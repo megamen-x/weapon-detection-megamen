@@ -103,4 +103,4 @@ def image_detection(file: Image64, background: BackgroundTasks):
 @app.post('/video')
 def video_traking(input: Video):
     results = yolo.track(input.file)
-    return to_zip('/home/agar1us/Documents/perm_hack/video')
+    return to_zip('D:/Work/hack_perm_megamen/perm_hack/BackEnd/video')
