@@ -2,8 +2,8 @@ import io
 import os
 import sys
 import base64
-sys.path.append('BackEnd\\ml')
-sys.path.append('BackEnd\\ml\\sochi_ml')
+sys.path.append(os.path.join('BackEnd', 'ml'))
+sys.path.append(os.path.join('BackEnd', 'ml', 'sochi_ml'))
 from cv2_converter import crop, draw_boxes
 
 from time import sleep
@@ -30,6 +30,11 @@ class Image64(BaseModel):
     files: List[str]
     files_names: List[str]
 
+
+class Video(BaseModel):
+    file: str
+
+
 origins = [
     "*",
 ]
@@ -46,7 +51,7 @@ app.add_middleware(
 @app.on_event("startup")
 def startup_event():
     global yolo
-    yolo = YOLO(os.path.join('BackEnd', 'ml', 'best.pt'))
+    yolo = YOLO(os.path.join('BackEnd', 'ml', 'last_model.pt'))
 
 
 def to_zip(path: str):
@@ -58,7 +63,7 @@ def to_zip(path: str):
     return StreamingResponse(
         iter([zip_io.getvalue()]), 
         media_type="application/x-zip-compressed", 
-        headers = { "Content-Disposition": f"attachment; filename=images.zip"}
+        headers = { "Content-Disposition": f"attachment; filename=results.zip"}
     )
 
 
@@ -73,7 +78,7 @@ def full_predict():
 
 
 @app.post('/get_result_64')
-def main_64(file: Image64, background: BackgroundTasks):
+def image_detection(file: Image64, background: BackgroundTasks):
     path_files = os.path.join('BackEnd', 'photos')
     images = file.files
     names = file.files_names
@@ -93,3 +98,9 @@ def main_64(file: Image64, background: BackgroundTasks):
         json.dump(json_ans, outfile)
     background.add_task(remove_file, path_files)
     return to_zip(path_files)
+
+
+@app.post('/video')
+def video_traking(input: Video):
+    results = yolo.track(input.file)
+    return to_zip('/home/agar1us/Documents/perm_hack/video')
