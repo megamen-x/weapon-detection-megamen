@@ -37,9 +37,8 @@ def draw_boxes(path_to_image: str, yolo_predict) -> numpy.ndarray:
     image = cv2.imread(path_to_image)
     height, width, _ = image.shape
 
-    if yolo_predict[0].boxes.xyxyn is not None:
+    try:
         for object_ in yolo_predict[0].boxes.xyxyn:
-            # x_min, y_min, x_max, y_max = yolo_predict[0].boxes.xyxyn[0]
             x_min, y_min, x_max, y_max = object_
             x_min = int(x_min * width)
             y_min = int(y_min * height)
@@ -47,5 +46,27 @@ def draw_boxes(path_to_image: str, yolo_predict) -> numpy.ndarray:
             y_max = int(y_max * height)
             cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 3)  # array here
 
-    return image
+        return image
+    except:
+        return image
 
+
+def draw_boxes_from_list(path_to_image: str, list_yolo_pred) -> numpy.ndarray:
+    """
+    Та же самая функция, что и выше, просто для отрисовки боксов в виде листа
+    """
+    image = cv2.imread(path_to_image)
+    height, width, _ = image.shape
+
+    try:
+        for object_ in list_yolo_pred:
+            x_min, y_min, x_max, y_max = object_
+            x_min = int(x_min * width)
+            y_min = int(y_min * height)
+            x_max = int(x_max * width)
+            y_max = int(y_max * height)
+            cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 3)  # array here
+
+        return image
+    except:
+        return image
