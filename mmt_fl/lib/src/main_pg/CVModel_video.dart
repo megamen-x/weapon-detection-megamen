@@ -158,7 +158,7 @@ class  _CVVIDState extends State<CVVID>{
     });
     final picker = ImagePicker();
     final XFile? file = await picker.pickVideo(
-            source: ImageSource.gallery, maxDuration: const Duration(seconds: 10));
+            source: ImageSource.gallery, maxDuration: const Duration(seconds: 20));
     print(file?.path);
     final json = {'files_names': file?.path};
     final response = await http.post(
@@ -173,7 +173,8 @@ class  _CVVIDState extends State<CVVID>{
       String dataString = dataFile.readAsStringSync();
       final responceMap = jsonDecode(dataString);
       print(jsonEncode(responceMap["data"]));
-      _controller = VideoPlayerController.asset(jsonEncode(responceMap["data"]));
+
+      _controller = VideoPlayerController.asset('assets/Butterfly-209.mp4');
       setState(() {
         flag = true;
         _isLoading = false;

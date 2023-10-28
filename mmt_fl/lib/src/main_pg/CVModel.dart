@@ -170,6 +170,7 @@ class  _CVModelState extends State<CVModel>{
   Future<void> uploadImage() async {
     setState(() {
       _isLoading = true;
+      popup = '';
     });
     final picker = ImagePicker();
     List<XFile>? imageFileList = [];
@@ -215,11 +216,15 @@ class  _CVModelState extends State<CVModel>{
         flag = true;
         _isLoading = false;
         newDataList = dataMap; 
-        popup = jsonEncode(dataMap);
         NewDatas = [];
+        popup = 'файл-короткое-длинное-вооруженные\n';
         for (var i = 0; i < dataList.length; i++) {
           NewDatas.add(NewData(dataList[i][0].toString(), dataList[i][1].toString(), dataList[i][2].toString(), dataList[i][3].toString()));
+          popup += '${dataList[i][0]}             ${dataList[i][1]}              ${dataList[i][2]}                 ${dataList[i][3]}';
+          popup += '\n';
         }
+        popup += '\n';
+        popup += jsonEncode(responceMap["data"]);
         NewDataDataSource = NewDataSource(NewData_Data: NewDatas);
         if (Platform.isWindows) {
           if (frstImgs.contains("./assets/images/sml.png")) {
@@ -274,6 +279,7 @@ Future<File> getImageFileFromAssets(String path) async {
 // ---------------------------------------------------------------------------------------------- //
 // clearing files on Windows and Android
 Future<void> clearFolders() async {
+  popup = '';
   if (Platform.isAndroid) {
       final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
       Directory flutter_assets_dir = Directory('${appDocumentsDir.path}/flutter_assets');
@@ -351,7 +357,7 @@ Future<void> clearFolders() async {
           return AlertDialog(
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(12.0))),
-            title: const Text("Ошибка!", 
+            title: const Text("Содержание предикта модели", 
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontStyle: FontStyle.normal,
@@ -433,6 +439,7 @@ Future<void> clearFolders() async {
     
   }
 // ---------------------------------------------------------------------------------------------- //
+final DataGridController _dataGridController = DataGridController();
 // ---------------------------------------------------------------------------------------------- //
 // визуальная обертка
   @override
@@ -629,6 +636,8 @@ Future<void> clearFolders() async {
                                       ),
                                     child: SfDataGrid(
                                         source: NewDataDataSource,
+                                        // showCheckboxColumn: true,
+                                        // checkboxColumnSettings:  const DataGridCheckboxColumnSettings(showCheckboxOnHeader: false),
                                         allowSorting: true,
                                         allowMultiColumnSorting: true,
                                         allowTriStateSorting: true,
@@ -703,9 +712,49 @@ Future<void> clearFolders() async {
                                               )
                                           ),
                                         ],
-                                        gridLinesVisibility: GridLinesVisibility.both,
-                                        headerGridLinesVisibility: GridLinesVisibility.both,
-                                        selectionMode: SelectionMode.multiple,
+                                        footer: Container(
+                                        color: const Color(0xFF0E223F),
+                                        child: Center(
+                                            child: 
+                                            Padding(
+                                              padding: const EdgeInsets.all(5),
+                                              child: MaterialButton(
+                                                onPressed: () {
+                                                  var _selectedIndex = _dataGridController.selectedIndex;
+                                                  var _selectedRow = _dataGridController.selectedRow;
+                                                  var _selectedRows = _dataGridController.selectedRows;
+                                                  print(_selectedIndex);
+                                                  print(_selectedRow);
+                                                  print(_selectedRows);
+                                                  // Navigator.push(
+                                                  //   context,
+                                                  //   MaterialPageRoute(builder: (context) => const CVModel()),
+                                                  // );
+                                                },
+                                                color: const Color(0xFF3882F2),
+                                                elevation: 0,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(5.0),
+                                                ),
+                                                padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                                textColor: const Color(0xFF181818),
+                                                height: 50,
+                                                minWidth: 110,
+                                                child: const Text(
+                                                  "Active Learning",
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontStyle: FontStyle.normal,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )),
+                                          gridLinesVisibility: GridLinesVisibility.both,
+                                          headerGridLinesVisibility: GridLinesVisibility.both,
+                                          navigationMode: GridNavigationMode.row,
+                                          selectionMode: SelectionMode.multiple,
                                       ),
                                   ),
                                 ),
@@ -757,7 +806,7 @@ Future<void> clearFolders() async {
                                       child: 
                                       SizedBox(
                                         // height: MediaQuery.of(context).size.height,
-                                        width: 300,
+                                        width: 500,
                                         child: Stack(
                                           children: [                           
                                             PageView.builder(
@@ -776,9 +825,11 @@ Future<void> clearFolders() async {
                                                           Column(
                                                             children: [
                                                               Image.file(File(bboxImgs[index]),
-                                                                        height: 300,
-                                                                        width: MediaQuery.of(context).size.width,
+                                                                        height: 320,
+                                                                        // width: 1000,
+                                                                        width: MediaQuery.of(context).size.width * 1.15,
                                                                         fit: BoxFit.contain,
+                                                                        // fit: BoxFit.fitWidth,
                                                               ),
                                                               Text(basename(bboxImgs[index].toString()), 
                                                               style: const TextStyle(
