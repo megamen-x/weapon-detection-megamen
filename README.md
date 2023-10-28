@@ -41,10 +41,12 @@
 ## <a id="title2">Часть 2. Краткое описание решения</a>
 
 **Используемый стек технологий**
+
 ![изображение](https://github.com/mireaMegaman/perm_hack/assets/100156578/3b67c511-8f9f-4794-b6d4-41aca5e9c3f2)
 
 
 **Общая схема решения**
+
 ![изображение](https://github.com/mireaMegaman/perm_hack/assets/100156578/4786df02-04a0-4ab5-8ec3-8d202bbd37c8)
 
 
