@@ -4,7 +4,8 @@ import sys
 import base64
 sys.path.append(os.path.join('BackEnd', 'ml'))
 sys.path.append(os.path.join('BackEnd', 'ml', 'sochi_ml'))
-from cv2_converter import crop, draw_boxes
+from cv2_converter import crop, draw_boxes, draw_boxes_from_list
+from ensemble import ensemble_boxes, count_classes
 
 from time import sleep
 from typing import List
@@ -22,7 +23,7 @@ from PIL import Image
 import torch.nn.functional as F
 
 
-yolo = None
+models = None
 
 app = FastAPI(title="Guns detection")
 
@@ -50,8 +51,10 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup_event():
-    global yolo
-    yolo = YOLO(os.path.join('BackEnd', 'ml', 'last_model.pt'))
+    global models
+    model_1 = YOLO(os.path.join('BackEnd', 'ml', 'best_large.pt')) # впиши сюда путь до первой модели
+    model_2 = YOLO(os.path.join('BackEnd', 'ml', 'best_large_from_datasphere.pt')) # впиши сюда путь для второй модели
+    models = [model_1, model_2]
 
 
 def to_zip(path: str):
@@ -89,11 +92,21 @@ def image_detection(file: Image64, background: BackgroundTasks):
         image = Image.open(io.BytesIO(img_recovered))
         base_file_path = os.path.join('BackEnd', 'original', names[i])
         _ = image.save(base_file_path)
-        results = yolo.predict(image)
-        bbox_image = draw_boxes(base_file_path, results)
+        # results = yolo.predict(image)
+        boxes, scores, labels = ensemble_boxes(
+            models=models,
+            path_to_image=base_file_path
+        )
+        count_labels = count_classes(labels)
+        bbox_image = draw_boxes_from_list(
+            path_to_image=base_file_path,
+            list_yolo_pred=boxes
+        )
+        
+        # bbox_image = draw_boxes(base_file_path, results)
         imwrite(os.path.join(path_files, f"boxed_image-{names[i]}"), bbox_image)
-        count_short, count_long, count_dangerous_people = full_predict()
-        json_ans['data'].append({'name': names[i], 'count_short': count_short, 'count_long' : count_long, 'count_dangerous_people' : count_dangerous_people})
+        count_short, count_long = count_labels['1'], count_labels['0']
+        json_ans['data'].append({'name': names[i], 'count_short': count_short, 'count_long' : count_long})
     with open(os.path.join(path_files, 'data.txt'), 'w') as outfile:
         json.dump(json_ans, outfile)
     background.add_task(remove_file, path_files)
@@ -102,5 +115,5 @@ def image_detection(file: Image64, background: BackgroundTasks):
 
 @app.post('/video')
 def video_traking(input: Video):
-    results = yolo.track(input.file)
+    # results = yolo.track(input.file)
     return to_zip('/home/agar1us/Documents/perm_hack/video')
