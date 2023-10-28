@@ -51,7 +51,7 @@ app.add_middleware(
 @app.on_event("startup")
 def startup_event():
     global yolo
-    yolo = YOLO(os.path.join('BackEnd', 'ml', 'best.pt'))
+    yolo = YOLO(os.path.join('BackEnd', 'ml', 'last_model.pt'))
 
 
 def to_zip(path: str):
