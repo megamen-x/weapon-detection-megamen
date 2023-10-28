@@ -105,10 +105,15 @@ def ensemble_boxes(
 
 
 def count_classes(labels: List[int]) -> Dict[str, int]:
-    ans = {'0': 0, '1': 1}
+    ans = {
+        '1': 0,
+        '2': 0,
+        '3': 0,
+        '4': 0
+    }
 
     for label in labels:
-        ans[str(label)] += 1
+        ans[str(int(label))] += 1
 
     return ans
 
