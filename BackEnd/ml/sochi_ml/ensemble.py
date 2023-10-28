@@ -105,10 +105,15 @@ def ensemble_boxes(
 
 
 def count_classes(labels: List[int]) -> Dict[str, int]:
-    ans = {'0': 0, '1': 1}
+    ans = {
+        '1': 0,
+        '2': 0,
+        '3': 0,
+        '4': 0
+    }
 
     for label in labels:
-        ans[str(label)] += 1
+        ans[str(int(label))] += 1
 
     return ans
 
@@ -120,14 +125,15 @@ if __name__ == '__main__':
     models = [model_1, model_2]
 
     path_to_image = '/home/agar1us/Documents/perm_hack/4c45ef8a-frame_11_339_png.rf.3b720327f28c092e000e6d76162e3091.jpg'
-
     boxes, scores, labels = ensemble_boxes(
             models=models,
             path_to_image=path_to_image
         )
+    print(labels)
     count_labels = count_classes(labels)
     bbox_image = draw_boxes_from_list(
         path_to_image=path_to_image,
-        list_yolo_pred=boxes
+        list_yolo_pred=boxes,
+        labels=labels
     )
     cv2.imwrite(os.path.join("/home/agar1us/Documents/perm_hack/BackEnd/photos", "boxed_image-test.jpg"), bbox_image)

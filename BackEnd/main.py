@@ -92,7 +92,6 @@ def image_detection(file: Image64, background: BackgroundTasks):
         image = Image.open(io.BytesIO(img_recovered))
         base_file_path = os.path.join('BackEnd', 'original', names[i])
         _ = image.save(base_file_path)
-        # results = yolo.predict(image)
         boxes, scores, labels = ensemble_boxes(
             models=models,
             path_to_image=base_file_path
@@ -100,9 +99,9 @@ def image_detection(file: Image64, background: BackgroundTasks):
         # count_labels = count_classes(labels)
         bbox_image = draw_boxes_from_list(
             path_to_image=base_file_path,
-            list_yolo_pred=boxes
+            list_yolo_pred=boxes,
+            labels=labels
         )
-        # bbox_image = draw_boxes(base_file_path, results)
         imwrite(os.path.join(path_files, f"boxed_image-{names[i]}"), bbox_image)
         count_short, count_long = 1, 0 # count_labels['1'], count_labels['0']
         json_ans['data'].append({'name': names[i], 'count_short': count_short, 'count_long' : count_long, 'count_dangerous_people': count_short+count_long})
@@ -115,6 +114,5 @@ def image_detection(file: Image64, background: BackgroundTasks):
 @app.post('/video')
 def video_traking(input: Video):
     # results = yolo.track(input.file)
-    # return to_zip('/home/agar1us/Documents/perm_hack/video')
     return to_zip('D:/Work/hack_perm_megamen/perm_hack/BackEnd/video')
     

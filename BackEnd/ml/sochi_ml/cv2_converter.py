@@ -1,5 +1,6 @@
 import cv2
 import numpy
+from typing import List
 
 
 def crop(path_to_image: str, yolo_predict) -> numpy.ndarray:
@@ -51,21 +52,27 @@ def draw_boxes(path_to_image: str, yolo_predict) -> numpy.ndarray:
         return image
 
 
-def draw_boxes_from_list(path_to_image: str, list_yolo_pred) -> numpy.ndarray:
+def draw_boxes_from_list(
+        path_to_image: str,
+        list_yolo_pred: List[float],
+        labels: List[float]
+) -> numpy.ndarray:
     """
     Та же самая функция, что и выше, просто для отрисовки боксов в виде листа
     """
+    colors = {'1': (255, 0, 0), '2': (0, 255, 0), '3': (0, 0, 255), '4': (127, 127, 127)}
     image = cv2.imread(path_to_image)
     height, width, _ = image.shape
 
     try:
-        for object_ in list_yolo_pred:
+        for object_, label_ in zip(list_yolo_pred, labels):
+            color = colors[str(int(label_))]
             x_min, y_min, x_max, y_max = object_
             x_min = int(x_min * width)
             y_min = int(y_min * height)
             x_max = int(x_max * width)
             y_max = int(y_max * height)
-            cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 3)  # array here
+            cv2.rectangle(image, (x_min, y_min), (x_max, y_max), color, 3)  # array here
 
         return image
     except:
