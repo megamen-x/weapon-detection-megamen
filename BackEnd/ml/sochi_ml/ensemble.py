@@ -133,6 +133,7 @@ if __name__ == '__main__':
     count_labels = count_classes(labels)
     bbox_image = draw_boxes_from_list(
         path_to_image=path_to_image,
-        list_yolo_pred=boxes
+        list_yolo_pred=boxes,
+        labels=labels
     )
     cv2.imwrite(os.path.join("/home/agar1us/Documents/perm_hack/BackEnd/photos", "boxed_image-test.jpg"), bbox_image)
