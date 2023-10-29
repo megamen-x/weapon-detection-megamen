@@ -36,7 +36,7 @@ class  _CVVIDState extends State<CVVID>{
   ];
   List<String> bboxImgs = [
     // "./assets/images/sml.png",
-    "./assets/images/sml.png",
+    "./mmt_fl/assets/images/sml.png"
   ];
   List<String> cropImgs = [
     // "./assets/images/sml.png",
@@ -157,6 +157,9 @@ class  _CVVIDState extends State<CVVID>{
           if (frstImgs.contains("./assets/images/sml.png")) {
             frstImgs.remove("./assets/images/sml.png");
           }
+          if (bboxImgs.contains("./mmt_fl/assets/images/sml.png")) {
+            bboxImgs.remove("./mmt_fl/assets/images/sml.png");
+          }
           if (bboxImgs.contains("./assets/images/sml.png")) {
             bboxImgs.remove("./assets/images/sml.png");
           }
@@ -205,7 +208,8 @@ Future<void> clearFolders() async {
       "./assets/images/sml.png",
     ];
     bboxImgs = [
-      "./assets/images/sml.png",
+      "./mmt_fl/assets/images/sml.png"
+      // "./assets/images/sml.png",
     ];
     cropImgs = [
       "./assets/images/sml.png",

@@ -96,15 +96,18 @@ class  _CVModelState extends State<CVModel>{
   final _pageController = PageController();
   late var newDataList = [];
   late var popup = '';
+  // for debug
   List<String> frstImgs = [
     "./assets/images/sml.png",
   ];
   List<String> bboxImgs = [
-    "./assets/images/sml.png",
+    // "./assets/images/sml.png",
+    "./mmt_fl/assets/images/sml.png",
   ];
   List<String> cropImgs = [
     "./assets/images/sml.png",
   ];
+
   bool flag = false;
   List<Widget> nameSlots = [];
   bool _isLoading = false;
@@ -230,6 +233,9 @@ class  _CVModelState extends State<CVModel>{
           if (frstImgs.contains("./assets/images/sml.png")) {
             frstImgs.remove("./assets/images/sml.png");
           }
+          if (bboxImgs.contains("./mmt_fl/assets/images/sml.png")) {
+            bboxImgs.remove("./mmt_fl/assets/images/sml.png");
+          }
           if (bboxImgs.contains("./assets/images/sml.png")) {
             bboxImgs.remove("./assets/images/sml.png");
           }
@@ -294,7 +300,8 @@ Future<void> clearFolders() async {
       "./assets/images/sml.png",
     ];
     bboxImgs = [
-      "./assets/images/sml.png",
+      "./mmt_fl/assets/images/sml.png"
+      // "./assets/images/sml.png",
     ];
     cropImgs = [
       "./assets/images/sml.png",
