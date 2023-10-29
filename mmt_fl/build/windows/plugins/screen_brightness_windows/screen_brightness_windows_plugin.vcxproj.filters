@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\Work\hack_perm_megamen\perm_hack\mmt_fl\windows\flutter\ephemeral\.plugin_symlinks\screen_brightness_windows\windows\src\screen_brightness_windows_plugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Work\hack_perm_megamen\perm_hack\mmt_fl\windows\flutter\ephemeral\.plugin_symlinks\screen_brightness_windows\windows\src\current_brightness_change_stream_handler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\Work\hack_perm_megamen\perm_hack\mmt_fl\windows\flutter\ephemeral\.plugin_symlinks\screen_brightness_windows\windows\include\screen_brightness_windows\screen_brightness_windows_plugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Work\hack_perm_megamen\perm_hack\mmt_fl\windows\flutter\ephemeral\.plugin_symlinks\screen_brightness_windows\windows\include\screen_brightness_windows\base_stream_handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Work\hack_perm_megamen\perm_hack\mmt_fl\windows\flutter\ephemeral\.plugin_symlinks\screen_brightness_windows\windows\include\screen_brightness_windows\current_brightness_change_stream_handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Work\hack_perm_megamen\perm_hack\mmt_fl\windows\flutter\ephemeral\.plugin_symlinks\screen_brightness_windows\windows\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{E9B43BE0-F616-3875-A47A-838EAAAF2743}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{AE4CE096-070E-3283-BD4C-502C2228AF74}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
