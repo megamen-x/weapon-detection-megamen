@@ -50,7 +50,7 @@ def ensemble_boxes(
 
     boxes_, scores_, labels_ = [], [], []
     for model in models:
-        yolo_model_predict = model.predict(path_to_image, save_conf=True)
+        yolo_model_predict = model.predict(path_to_image, save_conf=True, seed=42)
         boxes_list, scores_list, labels_list = restructure_preds(yolo_model_predict)
 
         boxes_.append(boxes_list)
