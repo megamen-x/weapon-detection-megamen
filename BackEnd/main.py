@@ -2,8 +2,12 @@ import io
 import os
 import sys
 import base64
-sys.path.append(os.path.join('BackEnd', 'ml'))
-sys.path.append(os.path.join('BackEnd', 'ml', 'sochi_ml'))
+
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+sochi_ml = parent_dir + '/ml/sochi_ml/'
+ml = parent_dir + '/ml/'
+sys.path.insert(0, sochi_ml)
+print(ml + 'best_large.pt')
 from cv2_converter import crop, draw_boxes, draw_boxes_from_list
 from ensemble import ensemble_boxes, count_classes
 
@@ -52,8 +56,10 @@ app.add_middleware(
 @app.on_event("startup")
 def startup_event():
     global models
-    model_1 = YOLO(os.path.join('BackEnd', 'ml', 'best_large.pt')) # впиши сюда путь до первой модели
-    model_2 = YOLO(os.path.join('BackEnd', 'ml', 'best_model_from_datasphere.pt')) # впиши сюда путь для второй модели
+    # model_1 = YOLO(os.path.join('BackEnd', 'ml', 'best_large.pt')) # впиши сюда путь до первой модели
+    # model_2 = YOLO(os.path.join('BackEnd', 'ml', 'best_model_from_datasphere.pt')) # впиши сюда путь для второй модели
+    model_1 = YOLO(ml + 'best_large.pt') # впиши сюда путь до первой модели
+    model_2 = YOLO(ml + 'best_model_from_datasphere.pt')
     models = [model_1, model_2]
 
 
@@ -82,7 +88,7 @@ def full_predict():
 
 @app.post('/get_result_64')
 def image_detection(file: Image64, background: BackgroundTasks):
-    path_files = os.path.join('BackEnd', 'photos')
+    path_files = parent_dir + '/photos/'
     images = file.files
     names = file.files_names
     json_ans = {"data": []}
@@ -90,7 +96,7 @@ def image_detection(file: Image64, background: BackgroundTasks):
         image_as_bytes = str.encode(file)  # convert string to bytes
         img_recovered = base64.b64decode(image_as_bytes)  # decode base64string
         image = Image.open(io.BytesIO(img_recovered))
-        base_file_path = os.path.join('BackEnd', 'original', names[i])
+        base_file_path = parent_dir + '/original/' + f'{names[i]}'
         _ = image.save(base_file_path)
         boxes, scores, labels = ensemble_boxes(
             models=models,
@@ -105,7 +111,7 @@ def image_detection(file: Image64, background: BackgroundTasks):
         imwrite(os.path.join(path_files, f"boxed_image-{names[i]}"), bbox_image)
         count_short, count_long = 1, 0 # count_labels['1'], count_labels['0']
         json_ans['data'].append({'name': names[i], 'count_short': count_short, 'count_long' : count_long, 'count_dangerous_people': count_short+count_long})
-    with open(os.path.join(path_files, 'data.txt'), 'w') as outfile:
+    with open(path_files + 'data.txt', 'w') as outfile:
         json.dump(json_ans, outfile)
     background.add_task(remove_file, path_files)
     return to_zip(path_files)
