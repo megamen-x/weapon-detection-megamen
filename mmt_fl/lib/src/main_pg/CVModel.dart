@@ -102,7 +102,7 @@ class  _CVModelState extends State<CVModel>{
   ];
   List<String> bboxImgs = [
     // "./assets/images/sml.png",
-    "./mmt_fl/assets/images/sml.png",
+    // "./mmt_fl/assets/images/sml.png",
   ];
   List<String> cropImgs = [
     "./assets/images/sml.png",
@@ -116,6 +116,7 @@ class  _CVModelState extends State<CVModel>{
   // unzip ответа от сервера 
   Future<void> unzipFileFromResponse(List<int> responseBody) async {
     final archive = ZipDecoder().decodeBytes(responseBody);
+    bboxImgs = [];
     for (final file in archive) {
       final filename = file.name;
       if (file.isFile) {
@@ -209,7 +210,7 @@ class  _CVModelState extends State<CVModel>{
       File dataFile = File(path);
       String dataString = dataFile.readAsStringSync();
       final responceMap = jsonDecode(dataString);
-      print(responceMap);
+      // print(responceMap);
       List<dynamic> dataMap = jsonDecode(jsonEncode(responceMap["data"]));
       // print(dataMap);
       List<List> dataList = dataMap.map((element) => [element['name'], element['count_short'], element['count_long'], element['count_dangerous_people']]).toList();
@@ -245,7 +246,7 @@ class  _CVModelState extends State<CVModel>{
         }
       });
     } else {
-      print('Failed to upload image.');
+      // print('Failed to upload image.');
       setState(() {
         _isLoading = false;
       });
@@ -300,7 +301,7 @@ Future<void> clearFolders() async {
       "./assets/images/sml.png",
     ];
     bboxImgs = [
-      "./mmt_fl/assets/images/sml.png"
+      // "./mmt_fl/assets/images/sml.png"
       // "./assets/images/sml.png",
     ];
     cropImgs = [
@@ -638,7 +639,7 @@ final DataGridController _dataGridController = DataGridController();
                                       headerColor: const Color(0xFF0E223F),
                                       headerHoverColor: const Color(0xFF3882F2),
                                       gridLineColor: const Color(0xFF3882F2), 
-                                      gridLineStrokeWidth: 2.0,
+                                      // gridLineStrokeWidth: 2.0,
                                       rowHoverColor: const Color(0xFF0E223F),
                                       ),
                                     child: SfDataGrid(
@@ -727,12 +728,12 @@ final DataGridController _dataGridController = DataGridController();
                                               padding: const EdgeInsets.all(5),
                                               child: MaterialButton(
                                                 onPressed: () {
-                                                  var _selectedIndex = _dataGridController.selectedIndex;
-                                                  var _selectedRow = _dataGridController.selectedRow;
-                                                  var _selectedRows = _dataGridController.selectedRows;
-                                                  print(_selectedIndex);
-                                                  print(_selectedRow);
-                                                  print(_selectedRows);
+                                                  // var _selectedIndex = _dataGridController.selectedIndex;
+                                                  // var _selectedRow = _dataGridController.selectedRow;
+                                                  // var _selectedRows = _dataGridController.selectedRows;
+                                                  // print(_selectedIndex);
+                                                  // print(_selectedRow);
+                                                  // print(_selectedRows);
                                                   // Navigator.push(
                                                   //   context,
                                                   //   MaterialPageRoute(builder: (context) => const CVModel()),
@@ -741,7 +742,7 @@ final DataGridController _dataGridController = DataGridController();
                                                 color: const Color(0xFF3882F2),
                                                 elevation: 0,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(5.0),
+                                                  borderRadius: BorderRadius.circular(2.0),
                                                 ),
                                                 padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                                                 textColor: const Color(0xFF181818),
@@ -759,7 +760,7 @@ final DataGridController _dataGridController = DataGridController();
                                             ),
                                           )),
                                           gridLinesVisibility: GridLinesVisibility.both,
-                                          headerGridLinesVisibility: GridLinesVisibility.both,
+                                          // headerGridLinesVisibility: GridLinesVisibility.both,
                                           navigationMode: GridNavigationMode.row,
                                           selectionMode: SelectionMode.multiple,
                                       ),
@@ -772,6 +773,16 @@ final DataGridController _dataGridController = DataGridController();
                     ),
                   ),
 // ---------------------------------------------------------------------------------------------- //
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(40, 90, 40, 0),
+                    child: Divider(
+                      color: Color(0xFF3882F2),
+                      height: 16,
+                      thickness: 2,
+                      indent: 0,
+                      endIndent: 0,
+                    ),
+                  ),
                   const Padding(
                     padding: EdgeInsets.fromLTRB(8, 20, 30, 10),
                     child: Text(
@@ -789,11 +800,11 @@ final DataGridController _dataGridController = DataGridController();
 // ---------------------------------------------------------------------------------------------- //
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 460,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFF3882F2), width: 2),
-                      borderRadius: const BorderRadius.all(Radius.circular(6)),
-                    ),
+                    height: 440,
+                    // decoration: BoxDecoration(
+                    //   border: Border.all(color: const Color(0xFF3882F2), width: 2),
+                    //   borderRadius: const BorderRadius.all(Radius.circular(6)),
+                    // ),
                     child:  Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -856,7 +867,7 @@ final DataGridController _dataGridController = DataGridController();
                                             Align(
                                               alignment: Alignment.bottomCenter,
                                               child: Padding(
-                                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 35),
+                                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                                 child: SmoothPageIndicator(
                                                   controller: _pageController ,
                                                   count: bboxImgs.length,
@@ -907,6 +918,16 @@ final DataGridController _dataGridController = DataGridController();
                       ],
                     ),
                   ),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(40, 40, 40, 0),
+                    child: Divider(
+                      color: Color(0xFF3882F2),
+                      height: 16,
+                      thickness: 2,
+                      indent: 0,
+                      endIndent: 0,
+                    ),
+                  ),
 // ---------------------------------------------------------------------------------------------- //
                   Container(
                     alignment: Alignment.center,
@@ -928,8 +949,6 @@ final DataGridController _dataGridController = DataGridController();
                               try {
                                 File file = File('./responce/data.txt');
                                 if (file.existsSync()) {
-                                    print('ДА ЗДЕСЬ Я УЖЕ');
-                                    // String fileContent = await file.readAsString();
                                     _showPredict(context, popup);
                                     OpenFile.open(file.path);
                                 }
@@ -949,6 +968,7 @@ final DataGridController _dataGridController = DataGridController();
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
+                            
                           ),
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                           textColor: const Color(0xFF181818),

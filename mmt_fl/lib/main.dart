@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'MMT_CV',
       home: WelcomeScreen(),
+      debugShowCheckedModeBanner:false
     );
   }
 }

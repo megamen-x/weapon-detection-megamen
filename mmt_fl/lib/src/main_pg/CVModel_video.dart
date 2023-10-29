@@ -36,7 +36,7 @@ class  _CVVIDState extends State<CVVID>{
   ];
   List<String> bboxImgs = [
     // "./assets/images/sml.png",
-    "./mmt_fl/assets/images/sml.png"
+    // "./mmt_fl/assets/images/sml.png"
   ];
   List<String> cropImgs = [
     // "./assets/images/sml.png",
@@ -208,7 +208,7 @@ Future<void> clearFolders() async {
       "./assets/images/sml.png",
     ];
     bboxImgs = [
-      "./mmt_fl/assets/images/sml.png"
+      // "./mmt_fl/assets/images/sml.png"
       // "./assets/images/sml.png",
     ];
     cropImgs = [
