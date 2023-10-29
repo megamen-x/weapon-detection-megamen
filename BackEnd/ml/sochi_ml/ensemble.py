@@ -113,7 +113,7 @@ def count_classes(labels: List[int]) -> Dict[str, int]:
     }
 
     for label in labels:
-        ans[str(int(label))] += 1
+        ans[str(int(label+1))] += 1
 
     return ans
 

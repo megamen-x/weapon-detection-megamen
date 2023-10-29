@@ -111,7 +111,7 @@ def image_detection(file: Image64, background: BackgroundTasks):
             labels1=labels
         )
         imwrite(os.path.join(path_files, f"boxed_image-{names[i]}"), bbox_image)
-        count_short, count_long, count_dangerous_people = count_labels['3'], count_labels['0'], count_labels['1']
+        count_short, count_long, count_dangerous_people = count_labels['4'], count_labels['1'], count_labels['2']
         json_ans['data'].append({'name': names[i], 'count_short': count_short, 'count_long' : count_long, 'count_dangerous_people': count_dangerous_people})
     with open(path_files + 'data.txt', 'w') as outfile:
         json.dump(json_ans, outfile)
