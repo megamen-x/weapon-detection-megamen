@@ -26,6 +26,7 @@ from ultralytics import YOLO, RTDETR
 from PIL import Image
 import torch.nn.functional as F
 
+rtdent = None
 
 models = None
 weights = [1, 1.3]
@@ -56,12 +57,12 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup_event():
-    global models
+    global models, rtdent
     # model_1 = YOLO(os.path.join('BackEnd', 'ml', 'best_large.pt')) # впиши сюда путь до первой модели
     # model_2 = YOLO(os.path.join('BackEnd', 'ml', 'best_model_from_datasphere.pt')) # впиши сюда путь для второй модели
     model_1 = YOLO(ml + 'best_model_from_datasphere.pt') # впиши сюда путь до первой модели
-    model_2 = RTDETR(ml + 'best_rt_detr.pt')
-    models = [model_1, model_2]
+    rtdent = RTDETR(ml + 'best_rt_detr.pt')
+    models = [model_1, rtdent]
 
 
 def to_zip(path: str):
@@ -119,8 +120,12 @@ def image_detection(file: Image64, background: BackgroundTasks):
     return to_zip(path_files)
 
 
+def video(model, source):
+    model.track(source=source, show=True)
+
 @app.post('/video')
 def video_traking(input: Video):
     # results = yolo.track(input.file)
+    video(rtdent, input.file)
     return to_zip('D:/Work/hack_perm_megamen/perm_hack/BackEnd/video')
     
