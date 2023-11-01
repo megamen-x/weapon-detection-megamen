@@ -42,17 +42,16 @@
 
 **Используемый стек технологий**
 
-![изображение](https://github.com/mireaMegaman/perm_hack/assets/100156578/3b67c511-8f9f-4794-b6d4-41aca5e9c3f2)
-
+![изображение](https://github.com/mireaMegaman/perm_hack/blob/main/readme_assets/TEST.png)
 
 **Общая схема решения**
 
-![изображение](https://github.com/mireaMegaman/perm_hack/assets/100156578/4786df02-04a0-4ab5-8ec3-8d202bbd37c8)
+![изображение](https://github.com/mireaMegaman/perm_hack/blob/main/readme_assets/solution.png)
 
 
 **За основу решения ML части были выбраны модели:**
 * Ансамбль моделей YoloV8 (схема предикта ансамбля схематично он изображена ниже);
-  ![изображение](https://github.com/mireaMegaman/perm_hack/assets/100156578/a1dc99a2-fdcc-483f-85b0-9ea4371d7ed5)
+![изображение](https://github.com/mireaMegaman/perm_hack/blob/main/readme_assets/predict2.png)
 
 * DE⫶TR: End-to-End Object Detection;
 
