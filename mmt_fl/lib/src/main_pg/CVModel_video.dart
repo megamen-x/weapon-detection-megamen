@@ -8,15 +8,9 @@ import 'package:mmt_fl/src/main_pg/Left_Menu.dart';
 import 'package:mmt_fl/src/syst_pg/DataNotFound.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:archive/archive.dart';
-import 'package:path/path.dart';
 import 'package:flutter/services.dart';
-import 'package:media_kit/media_kit.dart';
-import 'package:media_kit_video/media_kit_video.dart';
-// import 'package:video_player/video_player.dart';
 
-// MediaKit.ensureInitialized();
 // ---------------------------------------------------------------------------------------------- //
 // Класс страницы
 class CVVID extends StatefulWidget {
@@ -27,35 +21,26 @@ class CVVID extends StatefulWidget {
 // ---------------------------------------------------------------------------------------------- //
 // сборщик
 class  _CVVIDState extends State<CVVID>{
-  final _pageController = PageController();
-  
-
   late var newDataList = [];
   List<String> frstImgs = [
     "./assets/images/sml.png",
   ];
   List<String> bboxImgs = [
-    // "./assets/images/sml.png",
-    // "./mmt_fl/assets/images/sml.png"
+
   ];
   List<String> cropImgs = [
-    // "./assets/images/sml.png",
     "./assets/images/sml.png",
   ];
 // ---------------------------------------------------------------------------------------------- //
-  late final player = Player();
-  late final controller = VideoController(player);
+  
 // ---------------------------------------------------------------------------------------------- //
   // инициация видео
   @override
   void initState() {
     super.initState();
-    // Play a [Media] or [Playlist].
-    // player.open(Media('D:/Work/hack_perm_megamen/perm_hack/mmt_fl/assets/images/test1.mp4'));
   }
   @override
   void dispose() {
-    player.dispose();
     super.dispose();
   }
 // ---------------------------------------------------------------------------------------------- //
@@ -73,8 +58,6 @@ class  _CVVIDState extends State<CVVID>{
     for (final file in archive) {
       final filename = file.name;
       if (file.isFile) {
-        // print("test file");
-        print(filename);
         final data = file.content as List<int>;
         if (filename.contains('.jpg') || filename.contains('.jpeg') || filename.contains('.png')) {
           if (Platform.isWindows) {
@@ -93,7 +76,6 @@ class  _CVVIDState extends State<CVVID>{
           }
           if (Platform.isAndroid) {
             Directory? tempDir = await getDownloadsDirectory(); 
-            // print(tempDir);
             String tempPath = tempDir!.path; 
             var filePath = tempPath + filename;
             File(filePath)
@@ -125,7 +107,6 @@ class  _CVVIDState extends State<CVVID>{
           }
         }
       } else {
-        print("test dir");
         await Directory('responce/$filename').create(recursive: true);
       }
     }
@@ -143,14 +124,13 @@ class  _CVVIDState extends State<CVVID>{
     print(file?.path);
     final json = {'file': file?.path};
     final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/video'),
+        Uri.parse('http://127.0.0.1:8080/get_result_64'),
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
         body: jsonEncode(json),
     );
     if (response.statusCode == 200) {
       unzipFileFromResponse(response.bodyBytes);
       setState(() {
-        player.open(Media('D:/Work/hack_perm_megamen/perm_hack/mmt_fl/assets/images/test1.mp4'));
         flag = true;
         _isLoading = false;
         if (Platform.isWindows) {
@@ -173,7 +153,6 @@ class  _CVVIDState extends State<CVVID>{
       print('Загрузка видео не удалась!');
       setState(() {
         _isLoading = false;
-        player.open(Media('D:/Work/hack_perm_megamen/perm_hack/mmt_fl/assets/images/test1.mp4'));
       });
     }
   }
@@ -195,21 +174,14 @@ class  _CVVIDState extends State<CVVID>{
 // clearing files on Windows and Android
 Future<void> clearFolders() async {
   if (Platform.isAndroid) {
-      // final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
-      // Directory flutter_assets_dir = Directory('${appDocumentsDir.path}/flutter_assets');
-      // final String downloadsDir = (await getDownloadsDirectory())!.path;
-      // List<FileSystemEntity> files = flutter_assets_dir.listSync();
-      // print(files);
-      // // getImageFileFromAssets('/sml.png');
-      // deleteFilesInFolder(downloadsDir);
+      
   } 
   else if (Platform.isWindows) {
     frstImgs = [
       "./assets/images/sml.png",
     ];
     bboxImgs = [
-      // "./mmt_fl/assets/images/sml.png"
-      // "./assets/images/sml.png",
+      
     ];
     cropImgs = [
       "./assets/images/sml.png",
@@ -361,9 +333,9 @@ Future<void> clearFolders() async {
                   // здесь была таблица
 // ---------------------------------------------------------------------------------------------- //
                   const Padding(
-                    padding: EdgeInsets.fromLTRB(8, 20, 30, 10),
+                    padding: EdgeInsets.fromLTRB(8, 20, 8, 10),
                     child: Text(
-                      "Недавние изображения, распознанные моделью",
+                      "Ваше видео открроется в новом окне",
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.clip,
                       style: TextStyle(
@@ -374,131 +346,42 @@ Future<void> clearFolders() async {
                       ),
                     ),
                   ),
-// ---------------------------------------------------------------------------------------------- //
                   Container(
+                    margin: const EdgeInsets.all(0),
+                    padding: const EdgeInsets.all(0),
                     width: MediaQuery.of(context).size.width,
-                    height: 460,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFF3882F2), width: 2),
-                      borderRadius: const BorderRadius.all(Radius.circular(6)),
-                    ),
-                    child:  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    height: 250,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        Flexible(
-                          child: CustomScrollView(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            slivers: <Widget>[
-                              SliverPadding(
-                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                              sliver: SliverList(
-                                delegate: SliverChildListDelegate(
-                                  <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                      child: 
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width,
-                                        height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-                                        // Use [Video] widget to display video output.
-                                        child: Video(controller: controller),
-                                      ),
-                                      // SizedBox(
-                                      //   // height: MediaQuery.of(context).size.height,
-                                      //   width: 300,
-                                      //   child: Stack(
-                                      //     children: [                           
-                                      //       PageView.builder(
-                                      //         controller: _pageController ,
-                                      //         scrollDirection: Axis.horizontal,
-                                      //         itemCount: bboxImgs.length,
-                                      //         itemBuilder: (context, index) {
-                                      //           return Align(
-                                      //             alignment: Alignment.topCenter,
-                                      //             child: Padding(
-                                      //               padding: const EdgeInsets.symmetric(
-                                      //                   vertical: 16, horizontal: 0),
-                                      //               child: ClipRRect(
-                                      //                 borderRadius: BorderRadius.circular(5.0),
-                                      //                 child:
-                                      //                   Column(
-                                      //                     children: [
-                                      //                       Image.file(File(bboxImgs[index]),
-                                      //                                 height: 300,
-                                      //                                 width: MediaQuery.of(context).size.width,
-                                      //                                 fit: BoxFit.contain,
-                                      //                       ),
-                                      //                       Text(basename(bboxImgs[index].toString()), 
-                                      //                       style: const TextStyle(
-                                      //                         fontWeight: FontWeight.w400,
-                                      //                         fontStyle: FontStyle.normal,
-                                      //                         fontSize: 18,
-                                      //                         color: Color(0xFFF3F2F3),
-                                      //                       ),
-                                      //                       )
-                                      //                     ],
-                                      //                   ),
-                                      //               ),
-                                      //             ),
-                                      //           );
-                                      //         },
-                                      //       ),
-                                      //       Align(
-                                      //         alignment: Alignment.bottomCenter,
-                                      //         child: Padding(
-                                      //           padding: const EdgeInsets.fromLTRB(0, 0, 0, 35),
-                                      //           child: SmoothPageIndicator(
-                                      //             controller: _pageController ,
-                                      //             count: bboxImgs.length,
-                                      //             axisDirection: Axis.horizontal,
-                                      //             effect: const ExpandingDotsEffect(
-                                      //               dotColor: Color(0xFF2b548f),
-                                      //               activeDotColor: Color(0xFF2b548f),
-                                      //               dotHeight: 10,
-                                      //               dotWidth: 10,
-                                      //               radius: 16,
-                                      //               spacing: 7,
-                                      //               expansionFactor: 2,
-                                      //             ),
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       const Align(
-                                      //         alignment: Alignment.topCenter,
-                                      //         child: Padding(
-                                      //           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                      //           child: Row(
-                                      //             children: [
-                                      //             Text(
-                                      //             "Yolo BBOX on video",
-                                      //             textAlign: TextAlign.center,
-                                      //             overflow: TextOverflow.clip,
-                                      //             style: TextStyle(
-                                      //               fontWeight: FontWeight.w600,
-                                      //               fontStyle: FontStyle.normal,
-                                      //               fontSize: 14,
-                                      //               color: Color(0xFFF3F2F3),
-                                      //             ),
-                                      //           ), ],
-                                      //           ),
-                                      //         ),
-                                      //       ),  
-                                      //     ],
-                                      //   ),
-                                      // ),
-                                    ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                        Text(
+                          "Для увеличения скорости обработки видео - используйте графические ускорители",
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 18,
+                            color: Color(0xFF3882F2),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(0),
+                          child:
+                              Image(
+                            image: AssetImage("assets/images/tmp.png"),
+                            height: 170,
+                            width: 170,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ],
                     ),
                   ),
+// ---------------------------------------------------------------------------------------------- //
+                  // здесь был вывод видео
 // ---------------------------------------------------------------------------------------------- //
                   Container(
                     alignment: Alignment.center,

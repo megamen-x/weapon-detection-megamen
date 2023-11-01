@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mmt_fl/src/syst_pg/WelcomeScreen.dart';
-import 'package:media_kit/media_kit.dart';
-import 'package:media_kit_video/media_kit_video.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  MediaKit.ensureInitialized();
   runApp(const MyApp());
 }
 
