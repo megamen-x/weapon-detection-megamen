@@ -11,8 +11,6 @@ D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutt
 D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutter_assets/assets/images/MVD_Russia.png
 D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutter_assets/assets/images/rgi_logo.png
 D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutter_assets/assets/images/sml.png
-D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutter_assets/assets/images/STATERA.png
-D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutter_assets/assets/images/test1.mp4
 D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutter_assets/assets/images/tmp.png
 D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutter_assets/assets/images/Untitled-1.png
 D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutter_assets/assets/images/vlad.png
