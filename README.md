@@ -74,7 +74,7 @@
 Благодаря особенности работы фреймворка Flutter есть возможность собрать финальное приложение на разные платформы заранее. 
 Таким образом для быстрого тестирования можно запустить собранное заранее приложение. <br>
 
-После того, как вы скопировали себе на устройство наш репозиторий - перейдите в [аналогичную директорию]([https://github.com/mireaMegaman/perm_hack/](https://github.com/mireaMegaman/perm_hack/blob/flutter_build/mmt_fl/build/windows/runner/Debug/mmt_fl.exe))
+После того, как вы скопировали себе на устройство наш репозиторий - перейдите в [аналогичную директорию](https://github.com/mireaMegaman/perm_hack/blob/main/mmt_fl/build/windows/runner/Debug/mmt_fl.exe)
 на вашем устройстве и запустите файл ```mmt_fl.exe```.  <br>
 Для корректной работы серверной части укажите в терминале команду ```docker run -it --rm -p '5000:5000' georgechufff/hacks_ai_perm:1.0.1```.
 
