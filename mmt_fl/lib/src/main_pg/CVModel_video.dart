@@ -60,7 +60,7 @@ class  _CVVIDState extends State<CVVID>{
       if (file.isFile) {
         final data = file.content as List<int>;
         if (filename.contains('.jpg') || filename.contains('.jpeg') || filename.contains('.png')) {
-          if (Platform.isWindows) {
+          // if (Platform.isWindows) {
             File('./responce/$filename')
             ..createSync(recursive: true)
             ..writeAsBytesSync(data);
@@ -73,7 +73,7 @@ class  _CVVIDState extends State<CVVID>{
             else {
               frstImgs.add('./responce/$filename');
             }
-          }
+          // }
           if (Platform.isAndroid) {
             Directory? tempDir = await getDownloadsDirectory(); 
             String tempPath = tempDir!.path; 
@@ -100,11 +100,11 @@ class  _CVVIDState extends State<CVVID>{
           }
         }
         else {
-          if (Platform.isWindows) {
+          // if (Platform.isWindows) {
             File('responce/$filename')
             ..createSync(recursive: true)
             ..writeAsBytesSync(data);
-          }
+          // }
         }
       } else {
         await Directory('responce/$filename').create(recursive: true);

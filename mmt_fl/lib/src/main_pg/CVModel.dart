@@ -121,7 +121,7 @@ class  _CVModelState extends State<CVModel>{
         // print(filename);
         final data = file.content as List<int>;
         if (filename.contains('.jpg') || filename.contains('.jpeg') || filename.contains('.png')) {
-          if (Platform.isWindows) {
+          // if (Platform.isWindows) {
             File('./responce/$filename')
             ..createSync(recursive: true)
             ..writeAsBytesSync(data);
@@ -134,7 +134,7 @@ class  _CVModelState extends State<CVModel>{
             else {
               frstImgs.add('./responce/$filename');
             }
-          }
+          // }
           if (Platform.isAndroid) {
             Directory? tempDir = await getDownloadsDirectory(); 
             // print(tempDir);
@@ -155,11 +155,11 @@ class  _CVModelState extends State<CVModel>{
           }
         }
         else {
-          if (Platform.isWindows) {
+          // if (Platform.isWindows) {
             File('responce/$filename')
             ..createSync(recursive: true)
             ..writeAsBytesSync(data);
-          }
+          // }
         }
       } else {
         await Directory('responce/$filename').create(recursive: true);
