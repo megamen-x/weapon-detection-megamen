@@ -10,7 +10,6 @@ import 'package:mmt_fl/src/syst_pg/DataNotFound.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:open_file_manager/open_file_manager.dart';
 import 'package:archive/archive.dart';
 import 'package:path/path.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -101,8 +100,7 @@ class  _CVModelState extends State<CVModel>{
     "./assets/images/sml.png",
   ];
   List<String> bboxImgs = [
-    // "./assets/images/sml.png",
-    // "./mmt_fl/assets/images/sml.png",
+
   ];
   List<String> cropImgs = [
     "./assets/images/sml.png",
@@ -194,7 +192,7 @@ class  _CVModelState extends State<CVModel>{
     }
     final json = {'files_names': pathFiles,'files': base64list};
     final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/get_result_64'),
+        Uri.parse('http://127.0.0.1:8080/get_result_64'),
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
         body: jsonEncode(json),
     );
@@ -210,11 +208,8 @@ class  _CVModelState extends State<CVModel>{
       File dataFile = File(path);
       String dataString = dataFile.readAsStringSync();
       final responceMap = jsonDecode(dataString);
-      // print(responceMap);
       List<dynamic> dataMap = jsonDecode(jsonEncode(responceMap["data"]));
-      // print(dataMap);
       List<List> dataList = dataMap.map((element) => [element['name'], element['count_short'], element['count_long'], element['count_dangerous_people']]).toList();
-      // print(dataList);
       
       setState(() {
         flag = true;
@@ -246,7 +241,6 @@ class  _CVModelState extends State<CVModel>{
         }
       });
     } else {
-      // print('Failed to upload image.');
       setState(() {
         _isLoading = false;
       });
@@ -277,10 +271,8 @@ Future<File> getImageFileFromAssets(String path) async {
   final byteData = await rootBundle.load('assets$path'); 
   final buffer = byteData.buffer; 
   Directory? tempDir = await getDownloadsDirectory(); 
-  // print(tempDir);
   String tempPath = tempDir!.path; 
   var filePath = tempPath + path;
-  // print(filePath);
   return File(filePath) .writeAsBytes(buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
 }
 // ---------------------------------------------------------------------------------------------- //
@@ -301,8 +293,7 @@ Future<void> clearFolders() async {
       "./assets/images/sml.png",
     ];
     bboxImgs = [
-      // "./mmt_fl/assets/images/sml.png"
-      // "./assets/images/sml.png",
+
     ];
     cropImgs = [
       "./assets/images/sml.png",
@@ -447,7 +438,7 @@ Future<void> clearFolders() async {
     
   }
 // ---------------------------------------------------------------------------------------------- //
-final DataGridController _dataGridController = DataGridController();
+// final DataGridController _dataGridController = DataGridController();
 // ---------------------------------------------------------------------------------------------- //
 // визуальная обертка
   @override
@@ -728,24 +719,15 @@ final DataGridController _dataGridController = DataGridController();
                                               padding: const EdgeInsets.all(5),
                                               child: MaterialButton(
                                                 onPressed: () {
-                                                  // var _selectedIndex = _dataGridController.selectedIndex;
-                                                  // var _selectedRow = _dataGridController.selectedRow;
-                                                  // var _selectedRows = _dataGridController.selectedRows;
-                                                  // print(_selectedIndex);
-                                                  // print(_selectedRow);
-                                                  // print(_selectedRows);
-                                                  // Navigator.push(
-                                                  //   context,
-                                                  //   MaterialPageRoute(builder: (context) => const CVModel()),
-                                                  // );
+                                                  
                                                 },
-                                                color: const Color(0xFF3882F2),
+                                                color: const Color(0xFF0E223F),
                                                 elevation: 0,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(2.0),
                                                 ),
                                                 padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                                                textColor: const Color(0xFF181818),
+                                                textColor: const Color(0xFF0E223F),
                                                 height: 50,
                                                 minWidth: 110,
                                                 child: const Text(
@@ -760,7 +742,6 @@ final DataGridController _dataGridController = DataGridController();
                                             ),
                                           )),
                                           gridLinesVisibility: GridLinesVisibility.both,
-                                          // headerGridLinesVisibility: GridLinesVisibility.both,
                                           navigationMode: GridNavigationMode.row,
                                           selectionMode: SelectionMode.multiple,
                                       ),
@@ -801,10 +782,6 @@ final DataGridController _dataGridController = DataGridController();
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: 440,
-                    // decoration: BoxDecoration(
-                    //   border: Border.all(color: const Color(0xFF3882F2), width: 2),
-                    //   borderRadius: const BorderRadius.all(Radius.circular(6)),
-                    // ),
                     child:  Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -823,7 +800,6 @@ final DataGridController _dataGridController = DataGridController();
                                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                       child: 
                                       SizedBox(
-                                        // height: MediaQuery.of(context).size.height,
                                         width: 500,
                                         child: Stack(
                                           children: [                           
@@ -844,10 +820,8 @@ final DataGridController _dataGridController = DataGridController();
                                                             children: [
                                                               Image.file(File(bboxImgs[index]),
                                                                         height: 320,
-                                                                        // width: 1000,
                                                                         width: MediaQuery.of(context).size.width * 1.15,
                                                                         fit: BoxFit.contain,
-                                                                        // fit: BoxFit.fitWidth,
                                                               ),
                                                               Text(basename(bboxImgs[index].toString()), 
                                                               style: const TextStyle(

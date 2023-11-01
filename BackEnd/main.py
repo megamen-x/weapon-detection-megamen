@@ -121,7 +121,7 @@ def image_detection(file: Image64, background: BackgroundTasks):
 
 
 def video(model, source):
-    model.track(source=source, show=True)
+    model.track(source=source, show=True, conf=0.45)
 
 @app.post('/video')
 def video_traking(input: Video):
