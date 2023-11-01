@@ -124,7 +124,7 @@ class  _CVVIDState extends State<CVVID>{
     print(file?.path);
     final json = {'file': file?.path};
     final response = await http.post(
-        Uri.parse('http://127.0.0.1:8080/get_result_64'),
+        Uri.parse('http://127.0.0.1:80/get_result_64'),
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
         body: jsonEncode(json),
     );

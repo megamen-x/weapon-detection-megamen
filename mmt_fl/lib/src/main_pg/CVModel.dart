@@ -182,7 +182,12 @@ class  _CVModelState extends State<CVModel>{
         imageFileList.addAll(selectedImages);
     }
     for (var i = 0; i < imageFileList.length; i++) {
-      pathFiles.add(imageFileList[i].path.split("\\").last);
+      if (Platform.isWindows) {
+        pathFiles.add(imageFileList[i].path.split("\\").last);
+      }
+      if (Platform.isLinux) {
+        pathFiles.add(imageFileList[i].path.split("/").last);
+      }
     }
     List<String>? base64list = [];
     for (var i = 0; i < imageFileList.length; i++) {
@@ -192,7 +197,7 @@ class  _CVModelState extends State<CVModel>{
     }
     final json = {'files_names': pathFiles,'files': base64list};
     final response = await http.post(
-        Uri.parse('http://127.0.0.1:8080/get_result_64'),
+        Uri.parse('http://127.0.0.1:80/get_result_64'),
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
         body: jsonEncode(json),
     );
@@ -200,6 +205,9 @@ class  _CVModelState extends State<CVModel>{
       unzipFileFromResponse(response.bodyBytes);
       String path = '';
       if (Platform.isWindows) {
+        path = "./responce/data.txt";
+      }
+      if (Platform.isLinux) {
         path = "./responce/data.txt";
       }
       if (Platform.isAndroid) { 
