@@ -41,7 +41,7 @@
 ## <a id="title2">Часть 2. Краткое описание решения</a>
 
 **Используемый стек технологий:**
-![изображение](https://github.com/mireaMegaman/perm_hack/blob/main/readme_assets/TEST.png)
+![изображение](https://github.com/mireaMegaman/perm_hack/blob/main/readme_assets/stack.png)
 
 **Общая схема решения:**
 ![изображение](https://github.com/mireaMegaman/perm_hack/blob/main/readme_assets/solution.png)
@@ -53,8 +53,9 @@
 
 По умолчанию, в нашем решении предоставлен **второй вариант** — однако, приложение может быть пересобрано и под разметку исключительно оружия. 
 
-На изображении ниже вы можете видеть приблизительную схему предсказания моделей в нашем решении.
-![изображение](https://github.com/mireaMegaman/perm_hack/blob/main/readme_assets/predict2.png)
+На изображениях ниже вы можете видеть приблизительную схему предсказания моделей в нашем решении.
+![изображение](https://github.com/mireaMegaman/perm_hack/blob/main/readme_assets/Yolo_RTDETR.png)
+![изображение](https://github.com/mireaMegaman/perm_hack/blob/main/readme_assets/RTDERT.png)
 
 **Для демонстрационного приложения были выбраны:**
 *  Flutter - для сборки мультиплатформенного приложения, с возможностью **развития** из десктопного варианта и в мобильную среду разработки;
