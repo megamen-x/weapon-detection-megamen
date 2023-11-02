@@ -23,3 +23,4 @@ D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutt
 D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutter_assets/packages/syncfusion_flutter_datagrid/assets/font/FilterIcon.ttf
 D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutter_assets/packages/syncfusion_flutter_datagrid/assets/font/UnsortIcon.ttf
 D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutter_assets/shaders/ink_sparkle.frag
+D:/Work/hack_perm_megamen/perm_hack/mmt_fl/build/windows/runner/Debug/data/flutter_assets/version.json
