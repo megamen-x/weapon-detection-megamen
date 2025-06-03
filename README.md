@@ -21,6 +21,7 @@
 2. [Описание решения](#title2)
 3. [Развертка приложения](#title3)
 4. [Демонстрация работы](#title4)
+5. [Награды](#title5)
 
 
 ## <a id="title1">Часть 1. Проблематика кейсодержателя</a>
@@ -126,5 +127,16 @@ uvicorn BackEnd.main:app
 ## <a id="title4">Часть 4. Демонстрация работы решения</a>
 
 Ознакомиться с подробным роликом тестирования приложения можно на нашем канале: https://www.youtube.com/channel/UC5qC_I5o2aatXDSxTHbjxzg
+
+<p align="right">(<a href="#readme-top"><i>Вернуться наверх</i></a>)</p>
+
+## <a id="title5">Часть 5. Награды</a>
+
+<div style="display: flex; justify-content: space-between;">
+  <img src="https://github.com/megamen-x/weapon-detection-megamen/blob/main/readme_assets/PFO_Egor.png" alt="Image 1" style="width: 23%; height: auto; margin: 0 1%;">
+  <img src="https://github.com/megamen-x/weapon-detection-megamen/blob/main/readme_assets/PFO_Lesha.png" alt="Image 2" style="width: 23%; height: auto; margin: 0 1%;">
+  <img src="https://github.com/megamen-x/weapon-detection-megamen/blob/main/readme_assets/PFO_Sasha.png" alt="Image 3" style="width: 23%; height: auto; margin: 0 1%;">
+  <img src="https://github.com/megamen-x/weapon-detection-megamen/blob/main/readme_assets/PFO_Vlad.png" alt="Image 4" style="width: 23%; height: auto; margin: 0 1%;">
+</div>
 
 <p align="right">(<a href="#readme-top"><i>Вернуться наверх</i></a>)</p>
